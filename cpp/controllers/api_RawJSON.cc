@@ -29,11 +29,28 @@ void RawJSON::post(const drogon::HttpRequestPtr &req, Callback &&callback) {
         return;
     }
 
-    if (json != nullptr)
-        json->clear();
+    auto param = req->getOptionalParameter<std::string>("system");
 
-    json = req->getJsonObject();
+    LOG_INFO << "Received a new JSON about " << param.value_or("generic") << " from Minecraft!";
+
+    if (json != nullptr) {
+        if (!param.has_value()) {
+            json->clear();
+            json = req->getJsonObject();
+        } else {
+            (*json)[param.value()] = *req->getJsonObject();
+        }
+    }
 
     auto response = drogon::HttpResponse::newHttpResponse();
     callback(response);
+
+    std::ostringstream filename;
+    filename << std::format("{:%Y_%m_%d_%H_%M_%S}", std::chrono::system_clock::now()) << ".json";
+    std::ofstream jsonfile(filename.str(), std::ios::out);
+
+    if (jsonfile.is_open()) {
+        jsonfile << *json << "\n";
+        jsonfile.close();
+    }
 }
