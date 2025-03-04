@@ -13,7 +13,7 @@ namespace api {
         METHOD_LIST_BEGIN
             // use METHOD_ADD to add your custom processing function here;
             ADD_METHOD_TO(RawJSON::get, "/api", Get);
-            ADD_METHOD_TO(RawJSON::post, "/api", Post);
+            ADD_METHOD_TO(RawJSON::post, "/api", Post, "api::MCServerFilter");
 
         METHOD_LIST_END
 
