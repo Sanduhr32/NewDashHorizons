@@ -31,7 +31,10 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
-    if (dnsAddr.toIp() != req->getHeader("x-forwarded-for") && source.ipNetEndian() != dnsAddr.ipNetEndian())
+    LOG_INFO << dnsAddr.toIp();
+    LOG_INFO << req->getHeader("x-forwarded-for");
+
+    if (dnsAddr.toIp() != req->getHeader("x-forwarded-for") || source.ipNetEndian() != dnsAddr.ipNetEndian())
     {
         //Check failed
         auto res = drogon::HttpResponse::newHttpResponse();
