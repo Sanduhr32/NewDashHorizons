@@ -19,9 +19,9 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
                  [&dnsAddr](const trantor::InetAddress &address) { dnsAddr = address;
     });
 
-    for (auto &[header, value]: req->headers()) {
-        LOG_INFO << header << ": " << value;
-    }
+//    for (auto &[header, value]: req->headers()) {
+//        LOG_INFO << header << ": " << value;
+//    }
 
     // block thread while async dns resolve is in progress
     // with maximum total timeout of around 1s
@@ -31,7 +31,7 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
-    if (source.ipNetEndian() != dnsAddr.ipNetEndian())
+    if (dnsAddr.toIp() != req->getHeader("x-forwarded-for") && source.ipNetEndian() != dnsAddr.ipNetEndian())
     {
         //Check failed
         auto res = drogon::HttpResponse::newHttpResponse();
