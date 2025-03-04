@@ -1,5 +1,5 @@
 -- placeholder comment
-json = require("json_lua.json")
+json = require("qjson_lua.qjson")
 
 local function lel()
     print("dummy bump")
