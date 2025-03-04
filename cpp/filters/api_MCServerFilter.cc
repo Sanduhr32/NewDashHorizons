@@ -35,15 +35,16 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
     }
 
     for (const auto &entry: dnsAddr)
-        LOG_INFO << entry.toIp();
-    LOG_INFO << req->getHeader("x-forwarded-for");
+        LOG_INFO << "DNS: " << entry.toIp();
+    LOG_INFO << "Header: " << req->getHeader("x-forwarded-for");
 
     std::string realIp = req->getHeader("x-forwarded-for");
 
-    if ((dnsAddr | std::views::transform([](const auto& x){ return x.toIp(); })
-                | std::views::filter([&](const auto& x){return x == realIp; })).empty())
+    if ((dnsAddr | std::views::transform([](auto x){ return x.toIp(); })
+                | std::views::filter([&](auto x){return x == realIp; })).empty())
     {
         //Check failed
+        LOG_ERROR << "failed check!";
         auto res = drogon::HttpResponse::newHttpResponse();
         res->setStatusCode(k401Unauthorized);
         fcb(res);
