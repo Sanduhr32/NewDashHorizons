@@ -4,11 +4,7 @@ local internet = comp.internet
 local env = require("env")
 require("utils")
 
----Finds the first ME Interface system that is not in the ignore list.
----@param ignore table A table of addresses to ignore when searching for ME Interface systems.
----@return table|nil Returns a proxy object representing the ME Interface system, or `nil` if not found.
 local function find_ME_System(ignore)
-
     for addr in comp.list("me_interface") do
         local ae2 = comp.proxy(addr, "me_interface")
         if not stringInTable(addr, ignore) then
@@ -39,17 +35,17 @@ end
 local data = {}
 local me_sys = find_ME_System({})
 
-table.insert(data, "power", {})
-table.insert(data.power, "in", me_sys.getAvgPowerInjection())
-table.insert(data.power, "max", me_sys.getMaxStoredPower())
-table.insert(data.power, "current", me_sys.getStoredPower())
-table.insert(data.power, "idle", me_sys.getIdlePowerUsage())
-table.insert(data.power, "use", me_sys.getAvgPowerUsage())
-table.insert(data, "items", me_sys.getItemsInNetwork())
-table.insert(data, "fluids", me_sys.getFluidsInNetwork())
-table.insert(data, "craftable", me_sys.getCraftables())
+data["power"] = {}
+data.power["in"] = me_sys.getAvgPowerInjection()
+data.power["max"] = me_sys.getMaxStoredPower()
+data.power["current"] = me_sys.getStoredPower()
+data.power["idle"] = me_sys.getIdlePowerUsage()
+data.power["use"] = me_sys.getAvgPowerUsage()
+data["items"] = me_sys.getItemsInNetwork()
+data["fluids"] = me_sys.getFluidsInNetwork()
+data["craftable"] = me_sys.getCraftables()
 
-table.insert(data, "cpus", {})
+data["cpus"] = {}
 
 local cpus = me_sys.getCpus()
 for i, v in ipairs(cpus) do
