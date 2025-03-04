@@ -30,7 +30,7 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
     // block thread while async dns resolve is in progress
     // with maximum total timeout of around 1s
     size_t iterations = 0;
-    while (!dnsAddr.empty() && 5 * iterations < 1000) {
+    while (dnsAddr.empty() && 5 * iterations < 1000) {
         iterations++;
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
