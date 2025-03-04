@@ -14,11 +14,12 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
                          FilterChainCallback &&fccb)
 {
     auto source = req->peerAddr();
-    auto dnsAddr = std::vector<trantor::InetAddress>();
+    auto dnsAddr = std::vector<std::string>();
     app().getResolver()->resolve(app().getCustomConfig()["server-host"].asString(),
                  [&dnsAddr](const std::vector<trantor::InetAddress> &addresses) {
                      for (const auto &address: addresses) {
-                         dnsAddr.push_back(address);
+                         LOG_INFO << "DNS: " << address.toIp();
+                         dnsAddr.push_back(address.toIp());
                      }
     });
 
@@ -35,13 +36,12 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
     }
 
     for (const auto &entry: dnsAddr)
-        LOG_INFO << "DNS: " << entry.toIp();
+        LOG_INFO << "DNS: " << entry;
     LOG_INFO << "Header: " << req->getHeader("x-forwarded-for");
 
     std::string realIp = req->getHeader("x-forwarded-for");
 
-    if ((dnsAddr | std::views::transform([](auto x){ return x.toIp(); })
-                | std::views::filter([&](auto x){return x == realIp; })).empty())
+    if ((dnsAddr | std::views::filter([&](auto& x){ return x == realIp; })).empty())
     {
         //Check failed
         LOG_ERROR << "failed check!";
