@@ -14,14 +14,11 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
                          FilterChainCallback &&fccb)
 {
     auto source = req->peerAddr();
-    auto dnsAddr = trantor::InetAddress{};
+    auto dnsAddr = std::vector<trantor::InetAddress>();
     app().getResolver()->resolve(app().getCustomConfig()["server-host"].asString(),
                  [&dnsAddr](const std::vector<trantor::InetAddress> &addresses) {
                      for (const auto &address: addresses) {
-                         if (!address.isIpV6()) {
-                             dnsAddr = address;
-                             return;
-                         }
+                         dnsAddr.push_back(address);
                      }
     });
 
@@ -32,15 +29,19 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
     // block thread while async dns resolve is in progress
     // with maximum total timeout of around 1s
     size_t iterations = 0;
-    while (!dnsAddr.ipNetEndian() && 5 * iterations < 1000) {
+    while (!dnsAddr.empty() && 5 * iterations < 1000) {
         iterations++;
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
-    LOG_INFO << dnsAddr.toIp();
+    for (const auto &entry: dnsAddr)
+        LOG_INFO << entry.toIp();
     LOG_INFO << req->getHeader("x-forwarded-for");
 
-    if (dnsAddr.toIp() != req->getHeader("x-forwarded-for") || source.ipNetEndian() != dnsAddr.ipNetEndian())
+    std::string realIp = req->getHeader("x-forwarded-for");
+
+    if ((dnsAddr | std::views::transform([](const auto& x){ return x.toIp(); })
+                | std::views::filter([&](const auto& x){return x == realIp; })).empty())
     {
         //Check failed
         auto res = drogon::HttpResponse::newHttpResponse();

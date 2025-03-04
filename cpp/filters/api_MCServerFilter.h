@@ -8,6 +8,7 @@
 
 #include <drogon/HttpFilter.h>
 #include <drogon/HttpAppFramework.h>
+#include <ranges>
 
 using namespace drogon;
 
