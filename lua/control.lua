@@ -1,15 +1,7 @@
 -- Power generation Controller for GT:New Horizons
 -- based on GT++ tanks, GT++ LSC and XL Gas Turbines
 local comp = require("component")
-
-local function stringInTable(str, tbl)
-    for _, value in ipairs(tbl) do
-        if value == str then
-            return true
-        end
-    end
-    return false
-end
+require("utils")
 
 ---comment
 ---@param gt_machine_name string
