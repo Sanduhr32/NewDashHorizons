@@ -16,7 +16,13 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
     auto source = req->peerAddr();
     auto dnsAddr = trantor::InetAddress{};
     app().getResolver()->resolve(app().getCustomConfig()["server-host"].asString(),
-                 [&dnsAddr](const trantor::InetAddress &address) { dnsAddr = address;
+                 [&dnsAddr](const std::vector<trantor::InetAddress> &addresses) {
+                     for (const auto &address: addresses) {
+                         if (!address.isIpV6()) {
+                             dnsAddr = address;
+                             return;
+                         }
+                     }
     });
 
 //    for (auto &[header, value]: req->headers()) {
