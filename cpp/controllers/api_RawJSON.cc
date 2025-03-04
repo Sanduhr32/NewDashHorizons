@@ -46,7 +46,12 @@ void RawJSON::post(const drogon::HttpRequestPtr &req, Callback &&callback) {
     callback(response);
 
     std::ostringstream filename;
+
+#if __has_include(<format>)
     filename << std::format("{:%Y_%m_%d_%H_%M_%S}", std::chrono::system_clock::now()) << ".json";
+#else
+    filename << ctime(nullptr) << ".json";
+#endif
     std::ofstream jsonfile(filename.str(), std::ios::out);
 
     if (jsonfile.is_open()) {

@@ -3,7 +3,9 @@
 #include <drogon/drogon.h>
 #include <fstream>
 #include <sstream>
-#include <format>
+#if __has_include(<format>)
+# include <format>
+#endif
 #include <chrono>
 
 using namespace drogon;
