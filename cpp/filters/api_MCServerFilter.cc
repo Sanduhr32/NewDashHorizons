@@ -19,6 +19,10 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
                  [&dnsAddr](const trantor::InetAddress &address) { dnsAddr = address;
     });
 
+    for (auto &[header, value]: req->headers()) {
+        LOG_INFO << header << ": " << value;
+    }
+
     // block thread while async dns resolve is in progress
     // with maximum total timeout of around 1s
     size_t iterations = 0;
