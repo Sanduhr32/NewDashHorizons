@@ -16,12 +16,13 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
     auto source = req->peerAddr();
     auto dnsAddr = std::vector<std::string>();
     app().getResolver()->resolve(app().getCustomConfig()["server-host"].asString(),
-                 [&dnsAddr](const std::vector<trantor::InetAddress> &addresses) {
+                                 (std::function<void(const std::vector<trantor::InetAddress>&)>) [&dnsAddr](const std::vector<trantor::InetAddress>& addresses) {
                      for (const auto &address: addresses) {
                          LOG_INFO << "DNS: " << address.toIp();
                          dnsAddr.push_back(address.toIp());
                      }
     });
+
 
 //    for (auto &[header, value]: req->headers()) {
 //        LOG_INFO << header << ": " << value;
