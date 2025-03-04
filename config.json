@@ -1,5 +1,4 @@
-/* This is a JSON format configuration file
- */
+/* This is a JSON format configuration file */
 {
     "listeners": [
         {
