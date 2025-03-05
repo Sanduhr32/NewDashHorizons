@@ -11,13 +11,15 @@
 #include <ranges>
 #include <netdb.h>
 #include <vector>
+#if __has_include(<format>)
+# include <format>
+#endif
 
 using namespace drogon;
 
 namespace api {
     class MCServerFilter : public HttpFilter<MCServerFilter> {
     private:
-        int lookup(const std::string& host, int family, std::vector<std::string>& out) ;
     public:
         virtual void doFilter(const HttpRequestPtr &req,
                       FilterCallback &&fcb,

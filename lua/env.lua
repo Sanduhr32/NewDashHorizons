@@ -1,5 +1,6 @@
 local env = {
-    url = ""
+    url = "",
+    secret = ""
 }
 
 return env
