@@ -15,6 +15,7 @@ namespace api {
     class RawJSON : public drogon::HttpController<RawJSON> {
     private:
         std::shared_ptr<Json::Value> json = std::make_shared<Json::Value>();
+        size_t count{};
     public:
         METHOD_LIST_BEGIN
             // use METHOD_ADD to add your custom processing function here;

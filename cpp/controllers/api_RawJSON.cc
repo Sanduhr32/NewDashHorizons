@@ -33,29 +33,42 @@ void RawJSON::post(const drogon::HttpRequestPtr &req, Callback &&callback) {
 
     LOG_INFO << "Received a new JSON about " << param.value_or("generic") << " from Minecraft!";
 
-    if (json != nullptr) {
+    if (json != nullptr && !json->empty()) {
         if (!param.has_value()) {
+            LOG_INFO << "JSON not null, trying to clear it!";
             json->clear();
+            LOG_INFO << "JSON cleared!";
             json = req->getJsonObject();
+            LOG_INFO << "Copied posted json!";
         } else {
+            LOG_INFO << "Trying to insert posted json into JSON";
             (*json)[param.value()] = *req->getJsonObject();
+            LOG_INFO << "Inserted posted json!";
         }
     }
 
     auto response = drogon::HttpResponse::newHttpResponse();
     callback(response);
 
-    std::ostringstream filename;
+    std::ostringstream sfilename;
+
+    LOG_INFO << "writing json to file!";
 
 #if __has_include(<format>)
-    filename << std::format("{:%Y_%m_%d_%H_%M_%S}", std::chrono::system_clock::now()) << ".json";
+    sfilename << std::format("{:%Y_%m_%d_%H_%M_%S}", std::chrono::system_clock::now()) << ".json";
 #else
-    filename << ctime(nullptr) << ".json";
+    sfilename << count++ << ".json";
 #endif
-    std::ofstream jsonfile(filename.str(), std::ios::out);
+
+    std::string filename = sfilename.str();
+    std::ofstream jsonfile(filename, std::ios::out);
+    LOG_INFO << "file name is: " << filename;
 
     if (jsonfile.is_open()) {
+        LOG_INFO << "file is open, writing!";
         jsonfile << *json << "\n";
+        LOG_INFO << "written!";
         jsonfile.close();
+        LOG_INFO << "closing";
     }
 }
