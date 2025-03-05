@@ -28,8 +28,17 @@ local function send(data, system)
         uri = env.url .. "/api"
     end
 
-    local headers = {["Content-Type"] = "application/json", ["X-drogon-secret"] = env.secret}
-    local req = internet.request(uri, json.encode(data), headers, "POST")
+    print(uri)
+    local json_data = json.encode(data)
+    print(json_data)
+    local headers = {["Content-Type"] = "application/json", ["X-drogon-auth"] = env.secret}
+
+    do
+        local json_header = json.encode(headers)
+        print(json_header)
+    end
+
+    local req = internet.request(uri, json_data, headers, "POST")
     req.finishConnect()
 end
 
