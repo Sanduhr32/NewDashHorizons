@@ -45,11 +45,10 @@ local me_sys = find_ME_System({})
 --data.power["idle"] = me_sys.getIdlePowerUsage()
 --data.power["use"] = me_sys.getAvgPowerUsage()
 --send(data.power, "me-power")
-data["items"] = me_sys.getItemsInNetwork()
 local temp = {}
 local count = 0
-for i, v in ipairs(data.items) do
-    temp[i] = v
+for i = 1, #me_sys.getItemsInNetwork() do
+    temp[i] = me_sys.getItemsInNetwork()[i]
 
     if (i > 0 and i % 20 == 0) then
         send(temp, "me-items-" .. tostring(count))
