@@ -2,12 +2,12 @@ local comp = require("component")
 local sh = comp.shell
 local libraries = {
     json = {
-        source = "https://github.com/Vurv78/qjson.lua/refs/heads/master",
+        source = "https://raw.githubusercontent.com/Vurv78/qjson.lua/refs/heads/master",
         files = {"qjson.lua"},
         dir = "./qjson_lua/"
     },
     itself = {
-        source = "https://github.com/Sanduhr32/NewDashHorizons/refs/heads/master",
+        source = "https://raw.githubusercontent.com/Sanduhr32/NewDashHorizons/refs/heads/master/lua",
         files = {"utils.lua", "env.lua", "me-status.lua"},
         dir = "./"
     }
