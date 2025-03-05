@@ -28,15 +28,8 @@ local function send(data, system)
         uri = env.url .. "/api"
     end
 
-    print(uri)
     local json_data = json.encode(data)
-    print(json_data)
     local headers = {["Content-Type"] = "application/json", ["X-drogon-auth"] = env.secret}
-
-    do
-        local json_header = json.encode(headers)
-        print(json_header)
-    end
 
     local req = internet.request(uri, json_data, headers, "POST")
     req.finishConnect()
@@ -45,36 +38,45 @@ end
 local data = {}
 local me_sys = find_ME_System({})
 
-data["power"] = {}
-data.power["in"] = me_sys.getAvgPowerInjection()
-data.power["max"] = me_sys.getMaxStoredPower()
-data.power["current"] = me_sys.getStoredPower()
-data.power["idle"] = me_sys.getIdlePowerUsage()
-data.power["use"] = me_sys.getAvgPowerUsage()
+--data["power"] = {}
+--data.power["in"] = me_sys.getAvgPowerInjection()
+--data.power["max"] = me_sys.getMaxStoredPower()
+--data.power["current"] = me_sys.getStoredPower()
+--data.power["idle"] = me_sys.getIdlePowerUsage()
+--data.power["use"] = me_sys.getAvgPowerUsage()
 --send(data.power, "me-power")
-data = {}
 data["items"] = me_sys.getItemsInNetwork()
---send(data.items, "me-items")
-data = {}
-data["fluids"] = me_sys.getFluidsInNetwork()
---send(data.fluids, "me-fluids")
-data = {}
-data["craftable"] = me_sys.getCraftables()
---send(data.craftable, "me-crafts")
-data = {}
+local temp = {}
+local count = 0
+for i, v in ipairs(data.items) do
+    temp[i] = v
 
-data["cpus"] = {}
-
-local cpus = me_sys.getCpus()
-for i, v in ipairs(cpus) do
-    local cpu = v
-    if (not cpu.busy) then
-        cpu.activeItems = ""
-        cpu.storedItems = ""
-        cpu.pendingItems = ""
-        cpu.finalOutput = ""
+    if (i > 0 and i % 20 == 0) then
+        send(temp, "me-items-" .. tostring(count))
+        count = count + 1
+        temp = {}
     end
-    table.insert(data.cpus, i, cpu)
 end
+data = {}
+--data["fluids"] = me_sys.getFluidsInNetwork()
+--send(data.fluids, "me-fluids")
+--data = {}
+--data["craftable"] = me_sys.getCraftables()
+--send(data.craftable, "me-crafts")
+--data = {}
+
+--data["cpus"] = {}
+--
+--local cpus = me_sys.getCpus()
+--for i, v in ipairs(cpus) do
+--    local cpu = v
+--    if (not cpu.busy) then
+--        cpu.activeItems = ""
+--        cpu.storedItems = ""
+--        cpu.pendingItems = ""
+--        cpu.finalOutput = ""
+--    end
+--    table.insert(data.cpus, i, cpu)
+--end
 
 --send(data.cpus, "me-cpus")
