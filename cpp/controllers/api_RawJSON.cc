@@ -29,11 +29,18 @@ void RawJSON::post(const drogon::HttpRequestPtr &req, Callback &&callback) {
         return;
     }
 
+    for (const auto &[param, value] : req->parameters())
+#if __has_include(<format>)
+        LOG_INFO << std::format("%20s", param) << ": " << std::format("%-20s", value);
+#else
+        LOG_INFO << param << ": " << value;
+#endif
+
     auto param = req->getOptionalParameter<std::string>("system");
 
     LOG_INFO << "Received a new JSON about " << param.value_or("generic") << " from Minecraft!";
 
-    if (json != nullptr && !json->empty()) {
+    if (json != nullptr) {
         if (!param.has_value()) {
             LOG_INFO << "JSON not null, trying to clear it!";
             json->clear();
@@ -45,6 +52,10 @@ void RawJSON::post(const drogon::HttpRequestPtr &req, Callback &&callback) {
             (*json)[param.value()] = *req->getJsonObject();
             LOG_INFO << "Inserted posted json!";
         }
+    } else {
+        LOG_INFO << "JSON null!";
+        json = req->getJsonObject();
+        LOG_INFO << "Copied posted json!";
     }
 
     auto response = drogon::HttpResponse::newHttpResponse();
@@ -66,7 +77,7 @@ void RawJSON::post(const drogon::HttpRequestPtr &req, Callback &&callback) {
 
     if (jsonfile.is_open()) {
         LOG_INFO << "file is open, writing!";
-        jsonfile << *json << "\n";
+        jsonfile << json->toStyledString() << "\n";
         LOG_INFO << "written!";
         jsonfile.close();
         LOG_INFO << "closing";

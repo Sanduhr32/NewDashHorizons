@@ -21,6 +21,13 @@ void MCServerFilter::doFilter(const HttpRequestPtr &req,
         LOG_INFO << header << ": " << value;
 #endif
 
+    for (const auto &[param, value] : req->parameters())
+#if __has_include(<format>)
+        LOG_INFO << std::format("%20s", param) << ": " << std::format("%-20s", value);
+#else
+        LOG_INFO << param << ": " << value;
+#endif
+
     if (app().getCustomConfig()["simple-auth"].asString() != req->getHeader("x-drogon-auth"))
     {
         //Check failed
