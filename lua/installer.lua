@@ -19,7 +19,8 @@ for name, lib_data in pairs(libraries) do
     local src = lib_data.source;
     for i, filename in ipairs(lib_data.files) do
         print("|- Downloading required file " .. filename)
-        local succ, fck = sh.execute("wget -Q \"" .. src .. "/" .. filename .. "\" \"" .. lib_data.dir .. filename .. "\"")
+        local command = "wget -Q \"%s\" \"%s\""
+        local succ, fck = sh.execute(string.format(command, src .. "/" .. filename, lib_data.dir .. filename))
         if not succ then
             print(fck)
             return
