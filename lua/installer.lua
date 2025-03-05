@@ -8,7 +8,7 @@ local libraries = {
     },
     itself = {
         source = "https://github.com/Sanduhr32/NewDashHorizons/refs/heads/master",
-        files = {"utils.lua", "env.lua", "me-status-lua"},
+        files = {"utils.lua", "env.lua", "me-status.lua"},
         dir = "./"
     }
 }

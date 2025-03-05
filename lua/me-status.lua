@@ -42,9 +42,17 @@ data.power["max"] = me_sys.getMaxStoredPower()
 data.power["current"] = me_sys.getStoredPower()
 data.power["idle"] = me_sys.getIdlePowerUsage()
 data.power["use"] = me_sys.getAvgPowerUsage()
+--send(data.power, "me-power")
+data = {}
 data["items"] = me_sys.getItemsInNetwork()
+--send(data.items, "me-items")
+data = {}
 data["fluids"] = me_sys.getFluidsInNetwork()
+--send(data.fluids, "me-fluids")
+data = {}
 data["craftable"] = me_sys.getCraftables()
+--send(data.craftable, "me-crafts")
+data = {}
 
 data["cpus"] = {}
 
@@ -60,4 +68,4 @@ for i, v in ipairs(cpus) do
     table.insert(data.cpus, i, cpu)
 end
 
-send(data, "me")
+--send(data.cpus, "me-cpus")
