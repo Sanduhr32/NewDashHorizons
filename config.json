@@ -15,12 +15,13 @@
         //home_page: Set the HTML file of the home page, the default value is "index.html"
         //If there isn't any handler registered to the path "/", the home page file in the "document_root" is send to clients as a response
         //to the request for "/".
+        "document_root": "./html/",
         "home_page": "index.html",
         //use_implicit_page: enable implicit pages if true, true by default
         "use_implicit_page": true,
         //implicit_page: Set the file which would the server access in a directory that a user accessed.
         //For example, by default, http://localhost/a-directory resolves to http://localhost/a-directory/index.html.
-        "implicit_page": "api",
+        "implicit_page": "index.html",
         //upload_path: The path to save the uploaded file. "uploads" by default. 
         //If the path isn't prefixed with /, ./ or ../,
         //it is relative path of document_root path
@@ -42,10 +43,10 @@
                 //"uri_prefix": "/.well-known/acme-challenge/",
                 //default_content_type: The default content type of the static files without
                 //an extension. empty string by default.
-                "default_content_type": "text/plain",
-                //alias: The location in file system, if it is prefixed with "/", it 
-                //presents an absolute path, otherwise it presents a relative path to 
-                //the document_root path. 
+                "default_content_type": "",
+                //alias: The location in file system, if it is prefixed with "/", it
+                //presents an absolute path, otherwise it presents a relative path to
+                //the document_root path.
                 //The default value is "" which means use the document root path as the location base path.
                 "alias": "",
                 //is_case_sensitive: indicates whether the URI prefix is case sensitive.
@@ -143,6 +144,20 @@
         // will be rejected.
         "enabled_compressed_request": false
     },
+    "db_clients":[
+        {
+            "name": "default",
+            "rdbms": "postgresql",
+            "host": "127.0.0.1",
+            "port": 5435,
+            "dbname": "gtnh",
+            "user": "gtnh",
+            "passwd": "gtnh-metrics",
+            "is_fast": false,
+            "connection_number": 1,
+            "timeout": -1.0
+        }
+    ],
     //custom_config: custom configuration for users. This object can be get by the app().getCustomConfig() method. 
     "custom_config": {
         "server-host": "localhost"

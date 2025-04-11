@@ -8,9 +8,6 @@
 
 #include <drogon/HttpFilter.h>
 #include <drogon/HttpAppFramework.h>
-#include <ranges>
-#include <netdb.h>
-#include <vector>
 #if __has_include(<format>)
 # include <format>
 #endif

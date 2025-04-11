@@ -1,25 +1,24 @@
 /**
  *
- *  MCServer.cc
+ *  api_ProxyHeaderFilter.cc
  *
  */
 
-#include "api_MCServerFilter.h"
+#include "api_ProxyHeaderFilter.h"
 
 using namespace drogon;
 using namespace api;
 
-void MCServerFilter::doFilter(const HttpRequestPtr &req,
+void ProxyHeaderFilter::doFilter(const HttpRequestPtr &req,
                          FilterCallback &&fcb,
                          FilterChainCallback &&fccb)
 {
-
-    if (app().getCustomConfig()["simple-auth"].asString() != req->getHeader("x-drogon-auth")
-        && !req->getHeader("user-agent").starts_with("Java"))
-    {
+    auto forwarded = req->getHeader("Forwarded");
+    //Edit your logic here
+    if (forwarded.find("for=") != std::string::npos) {
         //Check failed
         auto res = drogon::HttpResponse::newHttpResponse();
-        res->setStatusCode(k401Unauthorized);
+        res->setStatusCode(k500InternalServerError);
         fcb(res);
         return;
     }
