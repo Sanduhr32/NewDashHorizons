@@ -9,12 +9,12 @@ int main() {
     drogon::app().loadConfigFile("config.json");
     //drogon::app().loadConfigFile("../config.yaml");
     //Run HTTP framework,the method will block in the internal event loop
-    drogon::app().registerHandler("/stop", [](drogon::HttpRequestPtr req) -> drogon::Task<drogon::HttpResponsePtr> {
+    drogon::app().registerHandler("/stop", [](const drogon::HttpRequestPtr &req, drogon::Callback &&call) {
         auto response = drogon::HttpResponse::newHttpResponse();
         response->setStatusCode(drogon::k200OK);
         response->setBody("shutting");
+        call(response);
         drogon::app().quit();
-        co_return response;
     },{drogon::Get, "api::ProxyHeaderFilter", "drogon::LocalHostFilter"});
     drogon::app().registerHandler("/init-db", [](const drogon::HttpRequestPtr &req, drogon::Callback &&call) {
         auto db = drogon::app().getDbClient();
@@ -48,8 +48,5 @@ int main() {
     },{drogon::Get, "api::ProxyHeaderFilter", "drogon::LocalHostFilter"});
 
     drogon::app().run();
-    LOG_INFO << drogon::app().getDocumentRoot();
-    LOG_INFO << drogon::app().getHomePage();
-    LOG_INFO << drogon::app().getImplicitPage();
     return 0;
 }
