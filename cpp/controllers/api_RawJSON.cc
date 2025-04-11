@@ -42,6 +42,7 @@ void RawJSON::post(const drogon::HttpRequestPtr &req, Callback &&callback) {
 
     if (system_type.has_value() && system_type == "power") {
         auto db = drogon::app().getDbClient();
+        auto data = req->getJsonObject();
         db->execSqlAsync("INSERT INTO \"power_metrics\" (name, eu, eu_max, eu_in, eu_out) VALUES ($1, $2, $3, $4, $5);",
             [](const drogon::orm::Result &res){
                 LOG_DEBUG << "inserted a power metric";
@@ -49,7 +50,7 @@ void RawJSON::post(const drogon::HttpRequestPtr &req, Callback &&callback) {
             [](const drogon::orm::DrogonDbException &e) {
                 LOG_ERROR << e.base().what();
             },
-            mc_system.value(), (*json)["eu"].asInt64(), (*json)["eu_max"].asInt64(), (*json)["eu_in"].asInt64(), (*json)["eu_out"].asInt64()
+            mc_system.value(), (*data)["eu"].asInt64(), (*data)["eu_max"].asInt64(), (*data)["eu_in"].asInt64(), (*data)["eu_out"].asInt64()
         );
     }
 
