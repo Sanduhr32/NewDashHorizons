@@ -1,7 +1,4 @@
-local json = require("qjson_lua.qjson")
 local comp = require("component")
-local internet = comp.internet
-local env = require("env")
 require("utils")
 
 local function find_ME_System(ignore)
@@ -19,21 +16,7 @@ end
 ---@param system string|nil Optional. The system identifier to target a specific system.
 ---If provided, the URL is appended with `?system=<system>`.
 ---If not provided, the data is sent to the default URL.
-local function send(data, system)
 
-    local uri = ""
-    if system then
-        uri = env.url .. "/api?system=" .. system
-    else
-        uri = env.url .. "/api"
-    end
-
-    local json_data = json.encode(data)
-    local headers = {["Content-Type"] = "application/json", ["X-drogon-auth"] = env.secret}
-
-    local req = internet.request(uri, json_data, headers, "POST")
-    req.finishConnect()
-end
 
 local data = {}
 local me_sys = find_ME_System({})

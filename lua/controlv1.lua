@@ -3,36 +3,6 @@
 local comp = require("component")
 require("utils")
 
----comment
----@param gt_machine_name string
----@param skipper string|nil
----@return gt_machine|nil
-local function get_gt_proxy(gt_machine_name, skipper)
-    for addr in comp.list("gt_machine") do
-        local gregger = comp.proxy(addr, "gt_machine")
-        if gregger.getName() == gt_machine_name and not stringInTable(gregger.address, skipper) then
-            return gregger
-        end
-    end
-    return nil
-end
-
-
----@param str string
-local function parse(str)
-    return tonumber(str:gsub("[^0-9]", ""), 10)
-end
-
--- Function to simulate waiting for a specific duration (in seconds)
-if not os.sleep then
-    function os.sleep(seconds)
-        local start_time = os.time()
-        while os.time() - start_time < seconds do
-            -- Simulate idle state
-        end
-    end
-end
-
 ---The function to be run at intervals
 ---@param turbine gt_machine
 ---@param supercap gt_machine
