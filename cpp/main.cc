@@ -29,6 +29,7 @@ int main() {
                         "eu_max BIGINT not null,"
                         "eu_in BIGINT not null,"
                         "eu_out BIGINT not null"
+                        "time TIMESTAMP default (now() at time zone 'utc')"
                         ");");
 
         try {
