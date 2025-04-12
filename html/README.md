@@ -3,4 +3,5 @@ I've used
 - https://shenanigans.shoghisimon.ca/collection/css-blur-blob-bg/ with some adjustments
 - GTNH icons, as this project is for monitoring GTNH.
 
-I don't claim any copyright or licensing on these parts or modifications, as they are so minor value adjustments.
+I/We don't claim any copyright or licensing on these parts or modifications, as they are so minor value adjustments, and thereby all copyright and licensing terms belong to the original authors.
+In case of issues, please do so here at this repository under https://github.com/Sanduhr32/NewDashHorizons/issues/new .
