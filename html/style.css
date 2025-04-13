@@ -1,113 +1,121 @@
-* {
-    box-sizing: border-box;
-}
+/*
+    Global things go below here
+ */
 
-body {
+/* Things that are valid and relevant for common root elements */
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+}
+body * {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-}
-
-.header {
-    overflow: hidden;
-    background-color: #212121;
-    padding: 20px 10px;
-}
-
-.header a {
-    float: left;
     color: #e8e6e3;
-    text-align: center;
-    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+/* any that could be a link */
+a {
     text-decoration: none;
-    font-size: 18px;
-    line-height: 25px;
-    border-radius: 4px;
 }
 
-.header a.logo {
-    font-size: 25px;
+/*
+    Header things go below here
+ */
+
+/* Makes the header be a flexbox to all items within it align nicely */
+.header {
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    font-size: large;
+    padding: .2rem 1rem;
+    background-color: #212121;
+}
+/* An image within the header is about as big as indicated by an attached class */
+.header img {
+    width: 100%;
+}
+/* magical full width spacer between components */
+.header .spacer {
+    flex-grow: 1;
+}
+/* declares the actual of the logo image */
+.header .logo-image {
+    width: 3rem;
+}
+/* text next to the logo */
+.header .logo-text {
     font-weight: bold;
-    padding-top: 1.25rem;
+    font-size: x-large;
 }
-
-.header a:hover {
+/* any that is a clickable link should look button-ish */
+.header a[href] {
+    padding: 1rem;
+    border-radius: .5rem;
+    margin: 0 .1rem;
+}
+/* when a clickable link is being hovered */
+.header a[href]:hover {
     background-color: #ddd;
     color: black;
 }
-
-.header a.active {
+/* when a clickable link has been activated */
+.header a[href].active {
     background-color: dodgerblue;
     color: white;
 }
 
-.header-right {
-    float: right;
-}
-
-@media screen and (max-width: 500px) {
-    .header a {
-        float: none;
-        display: block;
-        text-align: left;
-    }
-
-    .header-right {
-        float: none;
-    }
-}
-
-/* From Uiverse.io by SelfMadeSystem */
 /*
-More comprehensive version at shenanigans.shoghisimon.ca/collection/css-blur-blob-bg/
+    Anything regarding actual site content goes below
  */
 
-.container::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    backdrop-filter: hue-rotate(90deg);
-    mask: linear-gradient(45deg, #0000, #000);
-    animation: rotaty 5s linear infinite;
-    transform-origin: center;
-}
-
 .container {
-    position: absolute;
+    height: 100%;
+    padding: 1rem;
+    /* default background unless specified otherwise */
     background-image: radial-gradient(
             circle at 50% 50%,
             #0000 0,
-            #0000 2px,
-            hsl(0 0 4%) 2px
+            #0000 .1rem,
+            #000 .3rem
     );
-    background-size: 8px 8px;
-    width: 100%;
-    height: 100%;
+    background-size: .5rem .5rem;
+    box-sizing: border-box;
+}
+/* every element inside the container */
+.container * {
+    width: max-content;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 50%);
 }
 
-@keyframes thingy {
-    0% {
-        filter: var(--f) hue-rotate(0deg);
-    }
-    to {
-        filter: var(--f) hue-rotate(1turn);
-    }
+.container iframe {
+    flex: 1; /* uugh */
+    width: revert; /* uugh */
+    border: 0;
 }
+
+/*
+    From Uiverse.io by SelfMadeSystem
+    More comprehensive version at shenanigans.shoghisimon.ca/collection/css-blur-blob-bg/
+ */
 
 .container::before {
     content: "";
     position: absolute;
-    inset: -8em;
+    inset: 0;
     z-index: -1;
-    --f: blur(7em) brightness(5);
+    --f: blur(7rem) brightness(5);
     --c: #09f;
-    animation: blobs-1e28bd3d 150s linear infinite,
-    thingy 5s linear infinite;
+    animation: moving-color-blobs 150s linear infinite, rainbow-hue 5s linear infinite;
     background-color: #000;
     background-image: radial-gradient(
-            ellipse 66px 50px at 50% 50%,
-            #355 0%,
-            transparent 100%
+        ellipse 66px 50px at 50% 50%,
+        #355 0%,
+        transparent 100%
     ),
     radial-gradient(ellipse 77px 60px at 50% 50%, #355 0%, transparent 100%),
     radial-gradient(ellipse 78px 100px at 50% 50%, #355 0%, transparent 100%),
@@ -126,7 +134,16 @@ More comprehensive version at shenanigans.shoghisimon.ca/collection/css-blur-blo
     313px 977px;
 }
 
-@keyframes blobs-1e28bd3d {
+@keyframes rainbow-hue {
+    0% {
+        filter: var(--f) hue-rotate(0deg);
+    }
+    to {
+        filter: var(--f) hue-rotate(1turn);
+    }
+}
+
+@keyframes moving-color-blobs {
     0% {
         background-position: 271px 478px,
         62px 291px,
@@ -150,10 +167,11 @@ More comprehensive version at shenanigans.shoghisimon.ca/collection/css-blur-blo
     }
 }
 
-.container * {
-    padding: 15px;
-    margin: 0;
-    background-color: rgba(0, 0, 0, 0.69);
-    width: max-content;
-    color: #e8e6e3;
+.container::after {
+    content: "";
+    position: absolute;
+    backdrop-filter: hue-rotate(90deg);
+    mask: linear-gradient(45deg, #0000, #000);
+    animation: rotaty 5s linear infinite;
+    transform-origin: center;
 }
