@@ -18,16 +18,18 @@ end
 ---If not provided, the data is sent to the default URL.
 
 
-local data = {}
 local me_sys = find_ME_System({})
 
---data["power"] = {}
---data.power["in"] = me_sys.getAvgPowerInjection()
---data.power["max"] = me_sys.getMaxStoredPower()
---data.power["current"] = me_sys.getStoredPower()
---data.power["idle"] = me_sys.getIdlePowerUsage()
---data.power["use"] = me_sys.getAvgPowerUsage()
---send(data.power, "me-power")
+--[[
+local data = {}
+data["power"] = {}
+data.power["in"] = me_sys.getAvgPowerInjection()
+data.power["max"] = me_sys.getMaxStoredPower()
+data.power["current"] = me_sys.getStoredPower()
+data.power["idle"] = me_sys.getIdlePowerUsage()
+data.power["use"] = me_sys.getAvgPowerUsage()
+send(data.power, "me-power")
+]]--
 local temp = {}
 local count = 0
 for i = 1, #me_sys.getItemsInNetwork() do
@@ -39,26 +41,28 @@ for i = 1, #me_sys.getItemsInNetwork() do
         temp = {}
     end
 end
+--[[
 data = {}
---data["fluids"] = me_sys.getFluidsInNetwork()
---send(data.fluids, "me-fluids")
---data = {}
---data["craftable"] = me_sys.getCraftables()
---send(data.craftable, "me-crafts")
---data = {}
+data["fluids"] = me_sys.getFluidsInNetwork()
+send(data.fluids, "me-fluids")
+data = {}
+data["craftable"] = me_sys.getCraftables()
+send(data.craftable, "me-crafts")
+data = {}
 
---data["cpus"] = {}
---
---local cpus = me_sys.getCpus()
---for i, v in ipairs(cpus) do
---    local cpu = v
---    if (not cpu.busy) then
---        cpu.activeItems = ""
---        cpu.storedItems = ""
---        cpu.pendingItems = ""
---        cpu.finalOutput = ""
---    end
---    table.insert(data.cpus, i, cpu)
---end
+data["cpus"] = {}
+
+local cpus = me_sys.getCpus()
+for i, v in ipairs(cpus) do
+    local cpu = v
+    if (not cpu.busy) then
+        cpu.activeItems = ""
+        cpu.storedItems = ""
+        cpu.pendingItems = ""
+        cpu.finalOutput = ""
+    end
+    table.insert(data.cpus, i, cpu)
+end
+]]--
 
 --send(data.cpus, "me-cpus")
