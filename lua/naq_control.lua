@@ -26,7 +26,7 @@ local monitor = thread.create(function()
         data["eu_max"] = total_power
         data["eu_in"] = prod
         data["eu_out"] = drain
-        send(data, "Naquadah-Reaktor", "power")
+        --send(data, "Naquadah-Reaktor", "power")
 
         local state = naq_reac.isWorkAllowed()
         local nextstate = state
