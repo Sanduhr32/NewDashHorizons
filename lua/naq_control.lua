@@ -10,7 +10,7 @@ repeat
 
     if found then
          table.insert(addr_list, found.address)
-         table.insert(naq_reacs. found)
+         table.insert(naq_reacs, found)
     end
 until found == nil
 
