@@ -27,6 +27,7 @@ local monitor = thread.create(function()
     local min_percent = 0.1
     local max_percent = 0.98
     while true do
+        local cap_sen = supercap.getSensorInformation()
         local stored_power = parse(cap_sen[2])
         local total_power = parse(cap_sen[5])
         local avg5sout = cap_sen[10]
