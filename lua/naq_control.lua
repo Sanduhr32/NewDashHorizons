@@ -9,8 +9,8 @@ repeat
     local found = get_gt_proxy("nag", addr_list)
 
     if found then
-         table.insert(found.address, addr_list)
-         table.insert(found, naq_reacs)
+         table.insert(addr_list, found.address)
+         table.insert(naq_reacs. found)
     end
 until found == nil
 
