@@ -3,12 +3,24 @@ local event = require("event")
 local thread = require("thread")
 
 local supercap = get_gt_proxy("multimachine.supercapacitor")
-local naq_reac = get_gt_proxy("nag")
+local addr_list = {}
+local naq_reacs = {}
+repeat
+    local found = get_gt_proxy("nag", addr_list)
+
+    if found then
+         table.insert(found.address, addr_list)
+         table.insert(found, naq_reacs)
+    end
+until found == nil
 
 local cleanup = thread.create(function()
     event.pull("interrupted")
     print("Got signal to terminate!")
-    naq_reac.setWorkAllowed(false)
+    
+    for _, naq_reac in pairs(naq_reacs) do
+        naq_reac.setWorkAllowed(false)
+    end
 end)
 
 local monitor = thread.create(function()
@@ -30,17 +42,19 @@ local monitor = thread.create(function()
         send(data, "Naquadah-Reaktor", "power")
         ]]--
 
-        local state = naq_reac.isWorkAllowed()
-        local nextstate = state
-
-        if stored_power > (total_power * max_percent) then
-            nextstate = false
-        elseif stored_power < (total_power * min_percent) then
-            nextstate = true
-        end
-
-        if nextstate ~= state then
-            naq_reac.setWorkAllowed(nextstate)
+        for _, naq_reac in pairs(naq_reacs) do
+            local state = naq_reac.isWorkAllowed()
+            local nextstate = state
+    
+            if stored_power > (total_power * max_percent) then
+                nextstate = false
+            elseif stored_power < (total_power * min_percent) then
+                nextstate = true
+            end
+    
+            if nextstate ~= state then
+                naq_reac.setWorkAllowed(nextstate)
+            end
         end
         os.sleep(15)
     end
