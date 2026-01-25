@@ -15,7 +15,7 @@ repeat
 until found == nil
 
 local cleanup = thread.create(function()
-    event.pull("interrupted")
+    event.pull("interrupt")
     print("Got signal to terminate!")
     
     for _, naq_reac in pairs(naq_reacs) do
@@ -24,7 +24,7 @@ local cleanup = thread.create(function()
 end)
 
 local monitor = thread.create(function()
-    local min_percent = 0.1
+    local min_percent = 0.2
     local max_percent = 0.98
     while true do
         local cap_sen = supercap.getSensorInformation()
